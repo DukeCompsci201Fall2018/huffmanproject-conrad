@@ -62,23 +62,23 @@ public class HuffProcessor {
 		out.close();
 	}
 	
-	private void writeHeader(HuffNode root, HuffNode root2)
+	private void writeCompressedBits(String [] a, BitInputStream in, BitOutputStream out)
 	{
 		
 	}
-	private HuffNode writeHelper(BitInputStream in, BitOutputStream out)
+	private void writeHeader(BitInputStream in, BitOutputStream out)
 	{
 		int bit = in.readBits(1);
 		
 		if (bit == 0) {
 			HuffNode left = readTreeHeader(in);
 			HuffNode right = readTreeHeader(in);
-			return new HuffNode(0, 0, left, right);
+			//return new HuffNode(0, 0, left, right);
 		}
 		
 		else {
 			int value = in.readBits(BITS_PER_WORD + 1);
-			return new HuffNode(value, 0, null, null);
+			//return new HuffNode(value, 0, null, null);
 	}
 	
 	private void codingsHelper(HuffNode node, String s, String[] arr)
