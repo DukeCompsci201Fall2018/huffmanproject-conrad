@@ -1,4 +1,4 @@
-
+import java.util.*;
 /**
  * Although this class has a history of several years,
  * it is starting from a blank-slate, new and clean implementation
@@ -51,7 +51,8 @@ public class HuffProcessor {
 		
 		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
-		String[] codings = makeCodingsFromTree(root);
+		String[] codings = new String[ALPH_SIZE + 1];
+		codingHelper(root,"",codings);
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
@@ -59,8 +60,79 @@ public class HuffProcessor {
 		in.reset();
 		writeCompressedBits(codings, in, out);
 		out.close();
+	}
+	
+	private void writeHeader(HuffNode root, HuffNode root2)
+	{
 		
+	}
+	private HuffNode writeHelper(BitInputStream in, BitOutputStream out)
+	{
+		int bit = in.readBits(1);
 		
+		if (bit == 0) {
+			HuffNode left = readTreeHeader(in);
+			HuffNode right = readTreeHeader(in);
+			return new HuffNode(0, 0, left, right);
+		}
+		
+		else {
+			int value = in.readBits(BITS_PER_WORD + 1);
+			return new HuffNode(value, 0, null, null);
+	}
+	
+	private void codingsHelper(HuffNode node, String s, String[] arr)
+	{
+		if(node == null)
+		{
+			return;
+		}
+		
+		if(node.myLeft == null && node.myRight == null)
+		{
+			arr[node.myValue] = s;
+		}
+		
+		codings(node.myLeft, s + "0", arr);
+		codings(node.myRight, s + "1", arr);
+	}
+	
+	private HuffNode makeTreeFromCounts(int[] a)
+	{
+		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
+		
+		for(int i=0; i<a.length; i++) {
+		    if(a[i] > 0)
+		    		pq.add(new HuffNode(i,a[i],null,null);
+		}
+		
+		while (pq.size() > 1) {
+		    HuffNode left = pq.remove();
+		    HuffNode right = pq.remove();
+		    // create new HuffNode t with weight from
+		    // left.weight+right.weight and left, right subtrees
+		    HuffNode t = new HuffNode(0,left.myWeight+right.myWeight, left, right);
+		    pq.add(t);
+		}
+		
+		HuffNode root = pq.remove();
+		return root;
+	}
+	
+	private int[] readForCounts(BitInputStream i)
+	{
+		int[] ans = new int[ALPH_SIZE + 1];
+		
+		while (true){
+			int val = i.readBits(BITS_PER_WORD);
+			if (val == -1) break;
+			
+			ans[val] += 1;
+		}
+		
+		ans[PSEUDO_EOF] = 1;
+		
+		return ans;
 	}
 	/**
 	 * Decompresses a file. Output file must be identical bit-by-bit to the
