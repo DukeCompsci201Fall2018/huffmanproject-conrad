@@ -42,12 +42,25 @@ public class HuffProcessor {
 	 */
 	public void compress(BitInputStream in, BitOutputStream out){
 
-		while (true){
+		/**while (true){
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
 			out.writeBits(BITS_PER_WORD, val);
 		}
+		out.close();**/
+		
+		int[] counts = readForCounts(in);
+		HuffNode root = makeTreeFromCounts(counts);
+		String[] codings = makeCodingsFromTree(root);
+		
+		out.writeBits(BITS_PER_INT, HUFF_TREE);
+		writeHeader(root, out);
+		
+		in.reset();
+		writeCompressedBits(codings, in, out);
 		out.close();
+		
+		
 	}
 	/**
 	 * Decompresses a file. Output file must be identical bit-by-bit to the
@@ -90,6 +103,7 @@ public class HuffProcessor {
 			HuffNode right = readTreeHeader(in);
 			return new HuffNode(0, 0, left, right);
 		}
+		
 		else {
 			int value = in.readBits(BITS_PER_WORD + 1);
 			return new HuffNode(value, 0, null, null);
@@ -104,6 +118,7 @@ public class HuffProcessor {
 			if (bits == -1) {
 				throw new HuffException("bad input, no PSEUDO_EOF");
 			}
+		
 			else {
 				if (bits == 0) {
 					if (current.myLeft != null) {
@@ -111,6 +126,7 @@ public class HuffProcessor {
 					}
 
 				}
+				
 				else {
 					current = current.myRight;
 				}
@@ -118,6 +134,7 @@ public class HuffProcessor {
 					if (current.myValue == PSEUDO_EOF) {
 						break;
 					}
+					
 					else {
 						out.writeBits(BITS_PER_WORD, current.myValue);
 						current = root;
@@ -125,7 +142,5 @@ public class HuffProcessor {
 				}
 			}
 		}
-	}
-	
-	
+	}	
 }
