@@ -52,7 +52,7 @@ public class HuffProcessor {
 		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
 		String[] codings = new String[ALPH_SIZE + 1];
-		codingHelper(root,"",codings);
+		codingsHelper(root,"",codings);
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
@@ -66,9 +66,9 @@ public class HuffProcessor {
 	{
 		
 	}
-	private void writeHeader(BitInputStream in, BitOutputStream out)
+	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
-		int bit = in.readBits(1);
+		/**int bit = out.readBits(1);
 		
 		if (bit == 0) {
 			HuffNode left = readTreeHeader(in);
@@ -78,7 +78,7 @@ public class HuffProcessor {
 		
 		else {
 			int value = in.readBits(BITS_PER_WORD + 1);
-			//return new HuffNode(value, 0, null, null);
+			//return new HuffNode(value, 0, null, null);**/
 	}
 	
 	private void codingsHelper(HuffNode node, String s, String[] arr)
@@ -93,8 +93,8 @@ public class HuffProcessor {
 			arr[node.myValue] = s;
 		}
 		
-		codings(node.myLeft, s + "0", arr);
-		codings(node.myRight, s + "1", arr);
+		codingsHelper(node.myLeft, s + "0", arr);
+		codingsHelper(node.myRight, s + "1", arr);
 	}
 	
 	private HuffNode makeTreeFromCounts(int[] a)
@@ -103,7 +103,7 @@ public class HuffProcessor {
 		
 		for(int i=0; i<a.length; i++) {
 		    if(a[i] > 0)
-		    		pq.add(new HuffNode(i,a[i],null,null);
+		    		pq.add(new HuffNode(i,a[i],null,null));
 		}
 		
 		while (pq.size() > 1) {
