@@ -51,8 +51,9 @@ public class HuffProcessor {
 		
 		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
-		String[] codings = new String[ALPH_SIZE + 1];
-		codingsHelper(root,"",codings);
+		String[] codings = makeCodingsFromTree(root);
+				//new String[ALPH_SIZE + 1];
+		//codingsHelper(root,"",codings);
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
@@ -96,7 +97,14 @@ public class HuffProcessor {
 		}
 	}
 	
-	private void codingsHelper(HuffNode node, String s, String[] arr)
+	private String[] makeCodingsFromTree(HuffNode root)
+	{
+		String[] encodings = new String[ALPH_SIZE + 1];
+	    codingHelper(root,"",encodings);
+	    return encodings;
+	}
+	
+	private void codingHelper(HuffNode node, String s, String[] arr)
 	{
 		if(node == null)
 		{
@@ -106,10 +114,11 @@ public class HuffProcessor {
 		if(node.myLeft == null && node.myRight == null)
 		{
 			arr[node.myValue] = s;
+			return;
 		}
 		
-		codingsHelper(node.myLeft, s + "0", arr);
-		codingsHelper(node.myRight, s + "1", arr);
+		codingHelper(node.myLeft, s + "0", arr);
+		codingHelper(node.myRight, s + "1", arr);
 	}
 	
 	private HuffNode makeTreeFromCounts(int[] a)
@@ -127,6 +136,7 @@ public class HuffProcessor {
 		    // create new HuffNode t with weight from
 		    // left.weight+right.weight and left, right subtrees
 		    HuffNode t = new HuffNode(left.myValue+right.myValue,left.myWeight+right.myWeight, left, right);
+		    
 		    pq.add(t);
 		}
 		
