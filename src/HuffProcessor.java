@@ -121,6 +121,7 @@ public class HuffProcessor {
 		codingHelper(node.myRight, s + "1", arr);
 	}
 	
+	//good
 	private HuffNode makeTreeFromCounts(int[] a)
 	{
 		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
@@ -135,7 +136,7 @@ public class HuffProcessor {
 		    HuffNode right = pq.remove();
 		    // create new HuffNode t with weight from
 		    // left.weight+right.weight and left, right subtrees
-		    HuffNode t = new HuffNode(left.myValue+right.myValue,left.myWeight+right.myWeight, left, right);
+		    HuffNode t = new HuffNode(0,left.myWeight+right.myWeight, left, right);
 		    
 		    pq.add(t);
 		}
@@ -144,6 +145,7 @@ public class HuffProcessor {
 		return root;
 	}
 	
+	//good
 	private int[] readForCounts(BitInputStream i)
 	{
 		int[] ans = new int[ALPH_SIZE + 1];
