@@ -67,8 +67,11 @@ public class HuffProcessor {
 		for(int i=0; i<a.length; i++)
 		{
 			//int bits = in.readBits(BITS_PER_WORD);
-			String code = a[i];
-			out.writeBits(code.length(), Integer.parseInt(code,2));
+			if(a[i] != null)
+			{
+				String code = a[i];
+				out.writeBits(code.length(), Integer.parseInt(code,2));
+			}
 		}
 		
 		String code = a[PSEUDO_EOF];
