@@ -71,8 +71,7 @@ public class HuffProcessor {
 			if(a[i] != null)
 			{
 				String code = a[i];
-				//Integer.parseInt(code,2)
-				out.writeBits(code.length(), i);
+				out.writeBits(code.length(), Integer.parseInt(code,2));
 			}
 		}
 		
