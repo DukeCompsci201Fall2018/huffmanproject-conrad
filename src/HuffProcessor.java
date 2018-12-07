@@ -62,7 +62,7 @@ public class HuffProcessor {
 		writeCompressedBits(codings, in, out);
 		out.close();
 	}
-	
+	// fix
 	private void writeCompressedBits(String [] a, BitInputStream in, BitOutputStream out)
 	{
 		for(int i=0; i<a.length; i++)
@@ -78,7 +78,7 @@ public class HuffProcessor {
 		String code = a[PSEUDO_EOF];
 		out.writeBits(code.length(), Integer.parseInt(code,2));
 	}
-	
+	// fix
 	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
 		if(root == null)
@@ -96,7 +96,7 @@ public class HuffProcessor {
 			writeHeader(root.myRight, out);
 		}
 	}
-	
+	// seems good
 	private String[] makeCodingsFromTree(HuffNode root)
 	{
 		String[] encodings = new String[ALPH_SIZE + 1];
@@ -134,9 +134,8 @@ public class HuffProcessor {
 		while (pq.size() > 1) {
 		    HuffNode left = pq.remove();
 		    HuffNode right = pq.remove();
-		    // create new HuffNode t with weight from
-		    // left.weight+right.weight and left, right subtrees
-		    HuffNode t = new HuffNode(-1,left.myWeight+right.myWeight, left, right);
+		 
+		    HuffNode t = new HuffNode(-1, left.myWeight+right.myWeight, left, right);
 		    
 		    pq.add(t);
 		}
