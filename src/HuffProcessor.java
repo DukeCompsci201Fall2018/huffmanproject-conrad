@@ -52,8 +52,6 @@ public class HuffProcessor {
 		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
 		String[] codings = makeCodingsFromTree(root);
-				//new String[ALPH_SIZE + 1];
-		//codingsHelper(root,"",codings);
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
@@ -62,7 +60,7 @@ public class HuffProcessor {
 		writeCompressedBits(codings, in, out);
 		out.close();
 	}
-	// fix
+	
 	private void writeCompressedBits(String [] a, BitInputStream in, BitOutputStream out)
 	{
 		while(true)
@@ -71,16 +69,16 @@ public class HuffProcessor {
 			if(bits != -1)
 			{
 				String code = a[bits];
-				out.writeBits(code.length(), Integer.parseInt(code,2));
+				out.writeBits(code.length(), Integer.parseInt(code, 2));
 			}
 			
 			else break;
 		}
 		
 		String code = a[PSEUDO_EOF];
-		out.writeBits(code.length(), Integer.parseInt(code,2));
+		out.writeBits(code.length(), Integer.parseInt(code, 2));
 	}
-	// fix
+
 	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
 		if(root == null)
@@ -99,7 +97,7 @@ public class HuffProcessor {
 			writeHeader(root.myRight, out);
 		}
 	}
-	// seems good
+	
 	private String[] makeCodingsFromTree(HuffNode root)
 	{
 		String[] encodings = new String[ALPH_SIZE + 1];
@@ -124,7 +122,6 @@ public class HuffProcessor {
 		codingHelper(node.myRight, s + "1", arr);
 	}
 	
-	//good
 	private HuffNode makeTreeFromCounts(int[] a)
 	{	
 		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
@@ -132,7 +129,7 @@ public class HuffProcessor {
 		
 		for(int i=0; i<a.length; i++) {
 		    if(a[i] > 0)
-		    		pq.add(new HuffNode(i,a[i],null,null));
+		    		pq.add(new HuffNode(i, a[i], null, null));
 		}
 		
 		while (pq.size() > 1) {
@@ -148,7 +145,6 @@ public class HuffProcessor {
 		return root;
 	}
 	
-	//good
 	private int[] readForCounts(BitInputStream i)
 	{
 		int[] ans = new int[ALPH_SIZE + 1];
