@@ -81,12 +81,12 @@ public class HuffProcessor {
 	// fix
 	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
-		if(root == null)
+		/**if(root == null)
 		{
 			return;
-		}
+		}**/
 		
-		else if (root.myLeft == null && root.myRight == null) {
+		if (root.myLeft == null && root.myRight == null) {
 			out.writeBits(1, 1);
 			out.writeBits(BITS_PER_WORD + 1, root.myValue);
 		}
