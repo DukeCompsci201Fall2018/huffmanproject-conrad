@@ -67,10 +67,10 @@ public class HuffProcessor {
 	{
 		for(int i=0; i<a.length; i++)
 		{
-			//int bits = in.readBits(BITS_PER_WORD);
-			if(a[i] != null)
+			int bits = in.readBits(BITS_PER_WORD);
+			if(bits != -1)
 			{
-				String code = a[i];
+				String code = a[bits];
 				out.writeBits(code.length(), Integer.parseInt(code,2));
 			}
 		}
@@ -81,10 +81,10 @@ public class HuffProcessor {
 	// fix
 	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
-		/**if(root == null)
+		if(root == null)
 		{
 			return;
-		}**/
+		}
 		
 		if (root.myLeft == null && root.myRight == null) {
 			out.writeBits(1, 1);
